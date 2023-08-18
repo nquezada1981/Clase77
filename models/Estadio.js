@@ -16,3 +16,21 @@ export async function listarEstadios( ){
   //console.log(await estadio.findAll())
     return await estadio.findAll();
 }
+
+export async function eliminarEstadio(id ){
+    //console.log(await estadio.findAll())
+    const aux =  await estadio.findByPk(id);
+    return await aux.destroy(id);
+}
+export async function buscarEstadio(id){
+    return await estadio.findByPk(id);
+}
+
+export async function editarEstadio(id, nombre,localidad, capacidad){
+    const aux = await estadio.findByPk(id);
+    aux.nombre = nombre;
+    aux.localidad = localidad;
+    aux.capacidad = capacidad;
+    return aux.save();
+    //aux.update({nombre, localidad, capacidad})
+}

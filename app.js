@@ -1,6 +1,6 @@
 import express, { urlencoded } from 'express';
 import hbs from 'hbs';
-import { sequelize, estadio, crearEstadio, listarEstadios} from './models/Estadio.js';
+import { crearEstadio, listarEstadios, eliminarEstadio, buscarEstadio, editarEstadio} from './models/Estadio.js';
 //import { crear }  from './controller/EstadioController.js'
 
 const app = express();
@@ -17,7 +17,11 @@ app.get("/", (req, res)=>{
 
 app.post("/Estadios", (req, res)=>{
     console.log(req.body);
-    crearEstadio(req.body.txtNombre, req.body.txtLocalidad, req.body.nbrCapacidad);
+    if(req.body.txtId){
+        editarEstadio(req.body.txtId, req.body.txtNombre, req.body.txtLocalidad, req.body.nbrCapacidad);
+    }else{
+        crearEstadio(req.body.txtNombre, req.body.txtLocalidad, req.body.nbrCapacidad);
+    }
     //res.send("Estadio Creado");
     res.render("index");
 })
@@ -27,6 +31,17 @@ app.get("/getEstadios", async(req, res)=>{
     res.send(await listarEstadios())
 })
 
+app.delete("/deleteEstadio/:id", async(req, res)=>{
+    console.log(req.params.id);
+    await eliminarEstadio(req.params.id);
+    res.sendStatus(200);
+})
+
+app.get("/getEstadio/:id", async(req, res)=>{
+    res.send(await buscarEstadio(req.params.id))
+})
+
 app.listen(3000, ()=>{
     console.log("Servicio levantado")
+   
 })
